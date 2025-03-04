@@ -20,7 +20,7 @@ if not os.path.exists(model_path):
 
 # Load the model
 with open(model_path, "rb") as f:
-    model = pickle.load(f())
+    model = pickle.load(f)
 
 print("Model loaded successfully!")
 

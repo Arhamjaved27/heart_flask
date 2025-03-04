@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 # Google Drive File ID
-file_id = "1pShhKHhn6ViQ7YBCAblFLZRYV3St04Mn"
+file_id = "1yLj7RVq4yOXQ1o89zjdsYVaCNb6WjsmE"
 url = f"https://drive.google.com/uc?id={file_id}"
 
 # Model file path

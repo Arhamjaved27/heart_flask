@@ -1,2 +1,6 @@
 flask
 gunicorn
+pandas 
+scikit-learn 
+gdown
+os

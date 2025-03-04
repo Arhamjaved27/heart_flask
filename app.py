@@ -1,9 +1,7 @@
-from flask import Flask, request, jsonify
-import pickle
-import numpy as np
 import gdown
 import os
 import pickle
+import numpy as np
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -26,33 +24,34 @@ with open(model_path, "rb") as f:
 
 print("Model loaded successfully!")
 
-
-# Initialize Flask app
-app = Flask(__name__)
-
-@app.route("/")
-def home():
-    return "Heart Disease Prediction API is Running"
+# Auto-detect number of features
+try:
+    num_features = model.n_features_in_  # Get number of features
+except AttributeError:
+    num_features = None  # Fallback if the attribute is missing
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    try:
-        data = request.get_json()
+    data = request.json  # JSON input from the request
 
-        # Extract features (ensure the input keys match your training data)
-        features = np.array(data["features"]).reshape(1, -1)  # Convert input to 2D array
-        
-        # Make prediction
-        prediction = model.predict(features)
+    # Auto-fetch required feature values
+    if num_features is not None:
+        input_features = list(data.values())[:num_features]  # Select only required features
+    else:
+        input_features = list(data.values())  # Use all available data
 
-        return jsonify({"prediction": int(prediction[0])})  # Return prediction as JSON
+    # Convert input to numpy array and reshape for prediction
+    input_array = np.array(input_features).reshape(1, -1)
 
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    # Make prediction
+    prediction = model.predict(input_array)
+
+    return jsonify({"prediction": int(prediction[0])})
 
 if __name__ == "__main__":
     app.run(debug=True)
-    
+
+
 
 # from flask import Flask, request, jsonify
 

@@ -6,47 +6,47 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-# Google Drive File ID
-file_id = "1yLj7RVq4yOXQ1o89zjdsYVaCNb6WjsmE"
-url = f"https://drive.google.com/uc?id={file_id}"
+# # Google Drive File ID
+# file_id = "1yLj7RVq4yOXQ1o89zjdsYVaCNb6WjsmE"
+# url = f"https://drive.google.com/uc?id={file_id}"
 
-# Model file path
-model_path = "random_forest_heart_disease.pkl"
+# # Model file path
+# model_path = "random_forest_heart_disease.pkl"
 
-# Download model only if not already present
-if not os.path.exists(model_path):
-    print("Downloading model from Google Drive...")
-    gdown.download(url, model_path, quiet=False)
+# # Download model only if not already present
+# if not os.path.exists(model_path):
+#     print("Downloading model from Google Drive...")
+#     gdown.download(url, model_path, quiet=False)
 
-# Load the model
-with open(model_path, "rb") as f:
-    model = pickle.load(f)
+# # Load the model
+# with open(model_path, "rb") as f:
+#     model = pickle.load(f)
 
-print("Model loaded successfully!")
+# print("Model loaded successfully!")
 
-# Auto-detect number of features
-try:
-    num_features = model.n_features_in_  # Get number of features
-except AttributeError:
-    num_features = None  # Fallback if the attribute is missing
+# # Auto-detect number of features
+# try:
+#     num_features = model.n_features_in_  # Get number of features
+# except AttributeError:
+#     num_features = None  # Fallback if the attribute is missing
 
 @app.route("/predict", methods=["POST"])
 def predict():
-    data = request.json  # JSON input from the request
+    # data = request.json  # JSON input from the request
 
-    # Auto-fetch required feature values
-    if num_features is not None:
-        input_features = list(data.values())[:num_features]  # Select only required features
-    else:
-        input_features = list(data.values())  # Use all available data
+    # # Auto-fetch required feature values
+    # if num_features is not None:
+    #     input_features = list(data.values())[:num_features]  # Select only required features
+    # else:
+    #     input_features = list(data.values())  # Use all available data
 
-    # Convert input to numpy array and reshape for prediction
-    input_array = np.array(input_features).reshape(1, -1)
+    # # Convert input to numpy array and reshape for prediction
+    # input_array = np.array(input_features).reshape(1, -1)
 
-    # Make prediction
-    prediction = model.predict(input_array)
+    # # Make prediction
+    # prediction = model.predict(input_array)
 
-    return jsonify({"prediction": int(prediction[0])})
+    # return jsonify({"prediction": int(prediction[0])})
 
 if __name__ == "__main__":
     app.run(debug=True)
